@@ -2,6 +2,19 @@
 
 These examples show the kind of repo context this project helps generate.
 
+## Source-of-truth model
+
+Use `AGENT_CONTEXT.md` as the file humans edit. Downstream files like `AGENTS.md`, Cursor rules, Copilot instructions, and `CLAUDE.md` should be regenerated from that context.
+
+```md
+# AGENT_CONTEXT.md
+
+- Architecture lives in plain HTML, CSS, and JavaScript.
+- The app must stay static and easy to fork.
+- Generated agent files should not be hand-maintained.
+- Humans edit this source context, then regenerate downstream files.
+```
+
 ## Static Site
 
 Use this when a project is plain HTML, CSS, and JavaScript.

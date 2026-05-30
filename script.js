@@ -5,20 +5,23 @@ const resetButton = document.querySelector("#resetButton");
 const filePath = document.querySelector("#filePath");
 const tabs = Array.from(document.querySelectorAll(".tab"));
 
-let activeDoc = "agents";
+let activeDoc = "source";
 
 const defaults = {
   projectName: "MaintainerBuddy",
   purpose:
-    "幫開源維護者把 issue、PR、release 工作整理成可交給 AI coding agent 的任務。",
+    "A small tool that keeps AI coding agents aligned with the repository context.",
   stack: "Static HTML/CSS/JavaScript",
   stage: "Prototype",
+  sourceTruth:
+    "Architecture lives in plain HTML, CSS, and JavaScript.\nThe app must stay static and easy to fork.\nGenerated agent files should not be hand-maintained.\nHumans edit this source context, then regenerate downstream files.\nKeep instructions short enough for agents to actually follow.",
   rules:
-    "先讀 README 和現有檔案再修改\n保持變更小而聚焦\n不要重寫使用者沒有要求的部分\n新增功能時同步更新文件\n修改 UI 後檢查桌機和手機畫面\n能寫測試就補上最小測試",
+    "Inspect nearby files before editing\nKeep changes small and focused\nDo not rewrite unrelated user work\nUpdate docs when behavior changes\nCheck desktop and mobile layout after UI changes",
   verifyCommand: "open index.html and test the generator manually",
 };
 
 const docMeta = {
+  source: "AGENT_CONTEXT.md",
   agents: "AGENTS.md",
   cursor: ".cursor/rules/project-rules.mdc",
   copilot: ".github/copilot-instructions.md",
@@ -41,6 +44,7 @@ function getState() {
     purpose: data.get("purpose").trim() || defaults.purpose,
     stack: data.get("stack"),
     stage: data.get("stage"),
+    sourceTruth: lines(data.get("sourceTruth") || defaults.sourceTruth),
     rules: lines(data.get("rules") || defaults.rules),
     verifyCommand:
       data.get("verifyCommand").trim() || defaults.verifyCommand,
@@ -56,8 +60,47 @@ function numberedList(items) {
   return items.map((item, index) => `${index + 1}. ${item}`).join("\n");
 }
 
+function generatedNotice(state) {
+  return `> Generated from AGENT_CONTEXT.md for ${state.projectName}. Do not hand-maintain this file. Regenerate it when the source context changes.`;
+}
+
+function buildSource(state) {
+  return `# AGENT_CONTEXT.md
+
+Project: ${state.projectName}
+Stage: ${state.stage}
+Stack: ${state.stack}
+
+## Purpose
+
+${state.purpose}
+
+## Source of truth
+
+${bulletList(state.sourceTruth)}
+
+## Agent rules
+
+${bulletList(state.rules)}
+
+## Regeneration model
+
+${numberedList([
+    "Humans edit this file when architecture, commands, boundaries, or maintainer preferences change.",
+    "Downstream agent files are regenerated from this source.",
+    "Generated files should stay boring, consistent, and disposable.",
+    "If a generated file drifts from the repo, fix the source of truth first.",
+  ])}
+
+## Verification
+
+\`${state.verifyCommand}\``;
+}
+
 function buildSharedBody(state, title) {
-  return `# ${title}
+  return `${generatedNotice(state)}
+
+# ${title}
 
 Project: ${state.projectName}
 Stage: ${state.stage}
@@ -67,6 +110,10 @@ Stack: ${state.stack}
 
 ${state.purpose}
 
+## Derived repo context
+
+${bulletList(state.sourceTruth)}
+
 ## Agent rules
 
 ${bulletList(state.rules)}
@@ -74,6 +121,7 @@ ${bulletList(state.rules)}
 ## Workflow
 
 ${numberedList([
+    "Read AGENT_CONTEXT.md first.",
     "Understand the request and inspect nearby files before editing.",
     "Make the smallest useful change.",
     "Run the verification command when possible.",
@@ -93,7 +141,7 @@ function buildAgents(state) {
 - Do not introduce new frameworks unless the task clearly needs them.
 - Do not remove existing user content without being asked.
 - Keep generated copy beginner-friendly and easy to paste.
-- Prefer plain Markdown, HTML, CSS, and JavaScript for this project.`;
+- Prefer updating AGENT_CONTEXT.md over editing this file directly.`;
 }
 
 function buildCursor(state) {
@@ -136,25 +184,20 @@ function buildClaude(state) {
 }
 
 function buildLaunchPost(state) {
-  return `I built a tiny free tool for people using AI coding agents.
+  return `I am turning ${state.projectName} from a one-time generator into a source-of-truth workflow.
 
-Most repos give agents no context, so every prompt starts from zero.
+The idea:
+humans maintain AGENT_CONTEXT.md,
+then AGENTS.md / Cursor rules / Copilot instructions / CLAUDE.md regenerate from it.
 
-${state.projectName} generates:
-- AGENTS.md
-- Cursor project rules
-- GitHub Copilot instructions
-- CLAUDE.md
+Less hand-maintained drift. More boring consistency.
 
-Goal: give your repo a clear instruction layer in under 30 seconds.
-
-No login. No backend. Just open the page and copy the files.
-
-Looking for feedback from people using Codex, Cursor, Claude Code, Copilot, Cline, Roo, or Aider.`;
+Looking for feedback from people using Codex, Cursor, Claude Code, Cline, Roo, or Aider.`;
 }
 
 function buildDocs(state) {
   return {
+    source: buildSource(state),
     agents: buildAgents(state),
     cursor: buildCursor(state),
     copilot: buildCopilot(state),
@@ -168,7 +211,7 @@ function render() {
   const docs = buildDocs(state);
   const firstSelectedDoc = state.selectedDocs.includes(activeDoc)
     ? activeDoc
-    : state.selectedDocs[0] || "agents";
+    : state.selectedDocs[0] || "source";
 
   activeDoc = firstSelectedDoc;
   tabs.forEach((tab) => {
@@ -191,7 +234,7 @@ function resetForm() {
     field.checked = true;
   });
 
-  activeDoc = "agents";
+  activeDoc = "source";
   render();
 }
 
@@ -207,9 +250,9 @@ tabs.forEach((tab) => {
 
 copyButton.addEventListener("click", async () => {
   await navigator.clipboard.writeText(outputText.textContent);
-  copyButton.textContent = "已複製";
+  copyButton.textContent = "Copied";
   window.setTimeout(() => {
-    copyButton.textContent = "複製";
+    copyButton.textContent = "Copy";
   }, 1000);
 });
 

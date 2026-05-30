@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added source-of-truth mode with `AGENT_CONTEXT.md`
+- Updated downstream outputs to include a regeneration notice
+- Reframed launch copy around reducing drift instead of one-time file generation
+
 ## v0.1.0 - Initial public release
 
 - Added a static generator for AI agent repo instruction files
