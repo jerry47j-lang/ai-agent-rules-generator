@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent Rules Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="AI Agent Rules Generator">
+        <form class="panel input-panel" id="projectForm">
+          <div class="brand-row">
+            <div>
+              <p class="eyebrow">Repo Context</p>
+              <h1>AI Agent Rules Generator</h1>
+            </div>
+            <button class="ghost-button" type="button" id="resetButton">重填</button>
+          </div>
+
+          <label>
+            專案名稱
+            <input id="projectName" name="projectName" value="MaintainerBuddy" maxlength="60" required />
+          </label>
+
+          <label>
+            專案在做什麼
+            <input
+              id="purpose"
+              name="purpose"
+              value="幫開源維護者把 issue、PR、release 工作整理成可交給 AI coding agent 的任務。"
+              maxlength="150"
+              required
+            />
+          </label>
+
+          <div class="field-grid">
+            <label>
+              技術棧
+              <select id="stack" name="stack">
+                <option>Static HTML/CSS/JavaScript</option>
+                <option>React + TypeScript</option>
+                <option>Next.js + TypeScript</option>
+                <option>Python CLI</option>
+                <option>Node.js CLI</option>
+              </select>
+            </label>
+
+            <label>
+              專案階段
+              <select id="stage" name="stage">
+                <option>Prototype</option>
+                <option>MVP</option>
+                <option>Beta</option>
+                <option>Production</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Agent 要遵守的規則
+            <textarea id="rules" name="rules" rows="7" required>先讀 README 和現有檔案再修改
+保持變更小而聚焦
+不要重寫使用者沒有要求的部分
+新增功能時同步更新文件
+修改 UI 後檢查桌機和手機畫面
+能寫測試就補上最小測試</textarea>
+          </label>
+
+          <label>
+            驗證指令
+            <input id="verifyCommand" name="verifyCommand" value="open index.html and test the generator manually" maxlength="140" />
+          </label>
+
+          <fieldset>
+            <legend>產出規則檔</legend>
+            <label class="check-row">
+              <input type="checkbox" name="docType" value="agents" checked />
+              AGENTS.md
+            </label>
+            <label class="check-row">
+              <input type="checkbox" name="docType" value="cursor" checked />
+              Cursor rule
+            </label>
+            <label class="check-row">
+              <input type="checkbox" name="docType" value="copilot" checked />
+              Copilot instructions
+            </label>
+            <label class="check-row">
+              <input type="checkbox" name="docType" value="claude" checked />
+              CLAUDE.md
+            </label>
+            <label class="check-row">
+              <input type="checkbox" name="docType" value="launch" checked />
+              Launch post
+            </label>
+          </fieldset>
+        </form>
+
+        <section class="panel output-panel">
+          <div class="toolbar">
+            <div class="tabs" role="tablist" aria-label="規則檔">
+              <button class="tab is-active" type="button" data-doc="agents">AGENTS.md</button>
+              <button class="tab" type="button" data-doc="cursor">Cursor</button>
+              <button class="tab" type="button" data-doc="copilot">Copilot</button>
+              <button class="tab" type="button" data-doc="claude">CLAUDE.md</button>
+              <button class="tab" type="button" data-doc="launch">Launch</button>
+            </div>
+            <button class="primary-button" type="button" id="copyButton">複製</button>
+          </div>
+
+          <div class="file-strip" id="filePath">AGENTS.md</div>
+          <pre class="output" id="outputText" tabindex="0"></pre>
+        </section>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

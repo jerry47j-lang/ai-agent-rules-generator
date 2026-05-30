@@ -1,0 +1,270 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --ink: #181818;
+  --muted: #6b6258;
+  --panel: #ffffff;
+  --line: #d9d1c6;
+  --accent: #0c7c59;
+  --accent-dark: #095f45;
+  --focus: #da4f36;
+  --code-bg: #161616;
+  --code-ink: #f6f2eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(12, 124, 89, 0.12), transparent 34%),
+    linear-gradient(315deg, rgba(218, 79, 54, 0.12), transparent 30%),
+    var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", Arial,
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1440px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: 18px;
+  min-height: calc(100vh - 56px);
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(24, 24, 24, 0.08);
+}
+
+.input-panel {
+  align-self: start;
+  padding: 22px;
+}
+
+.brand-row,
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 18px;
+  font-size: clamp(1.65rem, 2vw, 2.1rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+label,
+fieldset {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+legend {
+  padding: 0 6px;
+  color: var(--ink);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 11px 12px;
+  background: #fffdf9;
+  color: var(--ink);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible,
+.output:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(218, 79, 54, 0.18);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.check-row {
+  display: flex;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 9px;
+  margin: 4px 0;
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.check-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.ghost-button {
+  background: #fffdf9;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.primary-button {
+  background: var(--accent);
+  color: white;
+}
+
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+
+.output-panel {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.toolbar {
+  border-bottom: 1px solid var(--line);
+  padding: 14px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab {
+  background: #fffdf9;
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.tab.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
+}
+
+.file-strip {
+  border-bottom: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--accent-dark);
+  font-family:
+    "Cascadia Code", Consolas, "Noto Sans Mono CJK TC", monospace;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+
+.output {
+  min-height: 520px;
+  margin: 0;
+  padding: 22px;
+  overflow: auto;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-family:
+    "Cascadia Code", Consolas, "Noto Sans Mono CJK TC", monospace;
+  font-size: 0.92rem;
+  line-height: 1.62;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 920px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .output {
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-row,
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs,
+  .tab,
+  .primary-button,
+  .ghost-button {
+    width: 100%;
+  }
+}
