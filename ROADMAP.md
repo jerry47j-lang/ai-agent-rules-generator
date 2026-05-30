@@ -14,6 +14,7 @@ The core direction is now source-of-truth first: maintain one editable context f
 
 ## v0.2
 
+- Add a paste-back mode: paste `AGENT_CONTEXT.md`, then regenerate downstream files
 - Export all generated files as a ZIP
 - Add copy buttons for each generated file
 - Add templates for React, Python CLI, Node.js CLI, and documentation projects

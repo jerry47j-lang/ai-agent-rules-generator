@@ -4,6 +4,10 @@ Generate and regenerate repo instruction files for AI coding agents from one sou
 
 Live demo: https://jerry47j-lang.github.io/ai-agent-rules-generator/
 
+## One-line value
+
+Private AI memory remembers the user. This project helps a repo carry its own public, versioned memory for coding agents.
+
 ## Why this project is timely
 
 AI coding agents are becoming a normal part of software work, but most repositories still do not give agents clear project context. This tool now starts with `AGENT_CONTEXT.md` as the source of truth, then derives the files agents and IDE assistants look for:
@@ -20,6 +24,16 @@ AI coding agents are becoming a normal part of software work, but most repositor
 The first version generated starter files. The next direction is sharper: humans maintain one source-of-truth file, and downstream agent files are regenerated when the repo changes.
 
 This is meant to reduce drift. A hand-maintained agent doc can fall behind the code. A derived agent doc can be regenerated from the current source context.
+
+## Why not just use AI memory or skills?
+
+AI memory and skills are useful, but they usually live with the user or tool. Open-source repos need context that travels with the project, can be reviewed in pull requests, and stays visible to every contributor and coding agent.
+
+This project treats repo context as a versioned artifact:
+
+- `AGENT_CONTEXT.md` is the human-edited source
+- downstream agent files are generated from it
+- changes can be reviewed, committed, and regenerated when the repo changes
 
 ## What it helps with
 
